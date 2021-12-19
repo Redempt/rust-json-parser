@@ -66,7 +66,7 @@ fn parse_json(input: &[char]) -> Result<(JSONValue, usize), ParseJSONError> {
         '"' => parse_string(input),
         '[' => parse_list(input),
         '{' => parse_map(input),
-        '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.' => parse_num(input),
+        '0'..='9' | '.' => parse_num(input),
         _ => Err(ParseJSONError::new("Invalid input"))
     }
 }
@@ -203,7 +203,7 @@ fn parse_num(chars: &[char]) -> Result<(JSONValue, usize), ParseJSONError> {
     }
     for c in iter {
         match c {
-            '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => {
+            '0'..='9' => {
                 let to_inc = if decimal_index == -1 {&mut num} else {&mut decimal};
                 *to_inc *= 10;
                 *to_inc += (*c as i64) - ('0' as i64);
